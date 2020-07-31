@@ -14,7 +14,7 @@ function printMessage(userName, badgeCount, points) {
 function getProfile(username) {
 
 // Connect to the API URL (https://teamtreehouse.com/ryanluttrell.json)
-    const request = https.get(`https://teamtreehouse.com/${username}.json`, response => {
+    const request = https.get(`https://wwwteamtreehouse.com/${username}.json`, response => {
 
 // Read the data
         let body = '';
@@ -26,7 +26,10 @@ function getProfile(username) {
             const profile = JSON.parse(body);
 // Print the data
             printMessage(username, profile.badges.length, profile.points.JavaScript);
-        })
+        });
+    });
+    request.on('error', error => {
+        console.error(`Probably with request ${error.message}`)
     })
 }
 
