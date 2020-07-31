@@ -12,25 +12,28 @@ function printMessage(userName, badgeCount, points) {
 }
 
 function getProfile(username) {
+    try {
+    // Connect to the API URL (https://teamtreehouse.com/ryanluttrell.json)
+        const request = https.get(`https://teamtreehouse.com/${username}.json`, response => {
 
-// Connect to the API URL (https://teamtreehouse.com/ryanluttrell.json)
-    const request = https.get(`https://wwwteamtreehouse.com/${username}.json`, response => {
-
-// Read the data
-        let body = '';
-        response.on('data', data => {
-            body += data.toString();
+    // Read the data
+            let body = '';
+            response.on('data', data => {
+                body += data.toString();
+            });
+            response.on('end', () => {
+    // Parse the JSON data
+                const profile = JSON.parse(body);
+    // Print the data
+                printMessage(username, profile.badges.length, profile.points.JavaScript);
+            });
         });
-        response.on('end', () => {
-// Parse the JSON data
-            const profile = JSON.parse(body);
-// Print the data
-            printMessage(username, profile.badges.length, profile.points.JavaScript);
-        });
-    });
-    request.on('error', error => {
-        console.error(`Probably with request ${error.message}`)
-    })
+        request.on('error', error => {
+            console.error(`Problem with request: ${error.message}`)
+        })
+    } catch (error) {
+        console.error(error.message)
+    }
 }
 
 const users = process.argv.slice(2)
